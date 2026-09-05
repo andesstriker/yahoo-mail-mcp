@@ -1,0 +1,7 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.andesstriker/yahoo-mail-mcp",
+  "description": "Read, search, move, and delete Yahoo Mail over IMAP — MCP server for Claude",
+  "repository": { "url": "https://github.com/andesstriker/yahoo-mail-mcp", "source": "github" },
+  "version": "1.0.0"
+}
