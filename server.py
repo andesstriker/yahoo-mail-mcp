@@ -149,7 +149,13 @@ def _decode_mime(value):
     parts = []
     for text, encoding in decode_header(value):
         if isinstance(text, bytes):
-            parts.append(text.decode(encoding or "utf-8", errors="replace"))
+            # Raw 8-bit headers (no RFC 2047 encoding) come back with the
+            # pseudo-charset "unknown-8bit", which Python can't decode; those
+            # bytes are almost always UTF-8 in practice.
+            try:
+                parts.append(text.decode(encoding or "utf-8", errors="replace"))
+            except LookupError:
+                parts.append(text.decode("utf-8", errors="replace"))
         else:
             parts.append(text)
     return "".join(parts)
@@ -457,8 +463,8 @@ def read_email(uid: int, folder: str = "INBOX") -> dict:
             "from": _decode_mime(msg.get("From")),
             "to": _decode_mime(msg.get("To")),
             "cc": _decode_mime(msg.get("Cc")),
-            "date": msg.get("Date"),
-            "list_unsubscribe": msg.get("List-Unsubscribe"),
+            "date": _decode_mime(msg.get("Date")),
+            "list_unsubscribe": _decode_mime(msg.get("List-Unsubscribe")),
             "body": body,
             "attachments": attachments,
         }
