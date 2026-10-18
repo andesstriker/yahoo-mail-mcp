@@ -25,7 +25,7 @@ in the PR description.
 
 ## Agent skill
 
-`skills/yahoo-mail/SKILL.md` documents the tools for agents. If you change a
+`skills/yahoo-mail-organizer/SKILL.md` documents the tools for agents. If you change a
 tool's name, parameters, or safety behavior in `server.py`, update it too.
 
 ## Scope

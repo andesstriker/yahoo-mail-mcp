@@ -1,9 +1,9 @@
 ---
-name: yahoo-mail
-description: Read, search, organize, and clean up a Yahoo Mail inbox through the yahoo-mail MCP server (IMAP). Use when the user asks to list or search emails, read a message, download an attachment, move mail between folders, create a folder, mark mail read/unread, trash or delete emails, or triage/declutter their Yahoo inbox.
+name: yahoo-mail-organizer
+description: Safely read, search, triage, and clean up a Yahoo Mail inbox through the yahoo-mail MCP server (IMAP). Use when the user asks to check their Yahoo inbox, search Yahoo mail, declutter or triage email, move or file messages into folders, trash emails, or download an attachment from Yahoo Mail.
 ---
 
-# Yahoo Mail
+# Yahoo Mail Organizer
 
 Guidance for using the `yahoo-mail` MCP server (tools: `list_folders`, `create_folder`, `list_emails`, `search_emails`, `read_email`, `get_attachment`, `move_email`, `delete_email`, `mark_email`).
 
@@ -43,6 +43,18 @@ Guidance for using the `yahoo-mail` MCP server (tools: `list_folders`, `create_f
 **Find a receipt or document.** `search_emails` with sender/subject and a `since`/`before` range, `read_email` to confirm, then `get_attachment` if a file is needed.
 
 **Clean up.** Trash (soft-delete) after confirmation. Offer permanent deletion only if the user wants Trash emptied of specific messages.
+
+## Output format
+
+- Lists of emails: a table with `UID | Date | Sender | Subject | Unread`, newest first, max 20 rows unless asked for more.
+- Before any change: a table of the affected messages plus one line stating the action (e.g. "Move 14 messages from INBOX to Newsletters"), then wait for a yes.
+- After a change: report the subject/sender each tool returned and a count of successes and failures.
+
+## More detail
+
+- `references/setup.md`: installing and registering the MCP server (Claude Code, Claude Desktop, Cursor).
+- `references/triage-playbook.md`: how to classify and batch inbox cleanup safely.
+- `references/troubleshooting.md`: error types and fixes.
 
 ## Limits
 

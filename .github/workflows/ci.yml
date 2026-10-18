@@ -22,7 +22,7 @@ jobs:
         run: |
           python - <<'PY'
           import re
-          text = open("skills/yahoo-mail/SKILL.md").read()
+          text = open("skills/yahoo-mail-organizer/SKILL.md").read()
           m = re.match(r"---\n(.*?)\n---\n", text, re.S)
           assert m, "missing frontmatter"
           for key in ("name", "description"):

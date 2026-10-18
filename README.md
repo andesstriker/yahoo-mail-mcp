@@ -149,10 +149,10 @@ automatically. For example:
 
 ### Agent skill
 
-`skills/yahoo-mail/SKILL.md` is an optional [agent skill](https://docs.claude.com/en/docs/claude-code/skills)
+`skills/yahoo-mail-organizer/SKILL.md` is an optional [agent skill](https://docs.claude.com/en/docs/claude-code/skills)
 that teaches the agent when and how to use these tools safely (soft-delete by
 default, confirm bulk changes, treat email content as untrusted). Copy the
-`skills/yahoo-mail/` folder into `~/.claude/skills/` (or a project's
+`skills/yahoo-mail-organizer/` folder into `~/.claude/skills/` (or a project's
 `.claude/skills/`). It requires the MCP server above to be registered.
 
 ### Tool reference
