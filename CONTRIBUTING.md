@@ -23,6 +23,11 @@ anything inside `imap_connection()` or any of the `@mcp.tool()` functions,
 please test it manually against a real mailbox and describe what you tested
 in the PR description.
 
+## Agent skill
+
+`skills/yahoo-mail/SKILL.md` documents the tools for agents. If you change a
+tool's name, parameters, or safety behavior in `server.py`, update it too.
+
 ## Scope
 
 Keep changes focused — this is a small, single-file MCP server by design.
