@@ -1,0 +1,26 @@
+<html><head><meta charset=utf-8><style>
+*{box-sizing:border-box}body{margin:0;width:1280px;height:800px;background:#eef2f7;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;color:#0f172a;display:flex;align-items:center;justify-content:center}
+.win{width:1120px;height:700px;background:#fff;border-radius:16px;box-shadow:0 20px 60px rgba(15,23,42,.18);overflow:hidden;display:flex;flex-direction:column}
+.bar{height:44px;background:#f1f5f9;display:flex;align-items:center;padding:0 16px;gap:8px;border-bottom:1px solid #e2e8f0}
+.dot{width:12px;height:12px;border-radius:50%}.t{margin-left:12px;font-size:13px;color:#64748b}
+.chat{flex:1;padding:28px 40px;overflow:hidden;display:flex;flex-direction:column;gap:18px}
+.u{align-self:flex-end;background:#0f766e;color:#fff;padding:12px 18px;border-radius:16px 16px 4px 16px;font-size:17px;max-width:70%}
+.a{align-self:flex-start;font-size:16px;line-height:1.5;max-width:92%}
+.tool{display:inline-block;font:13px ui-monospace,Menlo,monospace;background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;border-radius:8px;padding:4px 10px;margin:2px 4px 8px 0}
+table{border-collapse:collapse;font-size:14px;width:100%;margin:6px 0}th{background:#f1f5f9;text-align:left}th,td{border:1px solid #e2e8f0;padding:6px 10px}
+.ok{color:#15803d;font-weight:600}.warn{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:10px 14px;margin-top:8px}
+.foot{font-size:12px;color:#94a3b8;text-align:center;padding:8px;border-top:1px solid #e2e8f0}
+</style></head><body><div class=win><div class=bar><span class=dot style='background:#f87171'></span><span class=dot style='background:#fbbf24'></span><span class=dot style='background:#4ade80'></span><span class=t>Agent session · yahoo-mail-organizer skill</span></div><div class=chat>
+<div class=u>Clean up the Trailhead and Shopsy emails</div>
+<div class=a><span class=tool>search_emails(sender="example.org")</span><span class=tool>read_email(uid=4817)</span>
+<p>Both senders include an unsubscribe header, so they're bulk mail. I found <b>14 messages</b> (9 Trailhead, 5 Shopsy). Here is what I'd do:</p>
+<div class=warn><b>Proposed action:</b> create folder <code>Newsletters</code> and move 14 messages from INBOX. Nothing will be deleted.</div>
+<table><tr><th>UID</th><th>Sender</th><th>Subject</th></tr>
+<tr><td>4817</td><td>Trailhead Weekly</td><td>10 hikes for fall color</td></tr>
+<tr><td>4790</td><td>Trailhead Weekly</td><td>Gear guide: layers</td></tr>
+<tr><td>4816</td><td>Shopsy</td><td>Your weekend deals are here</td></tr>
+<tr><td colspan=3 style='color:#64748b'>…11 more</td></tr></table>
+<p><b>Shall I go ahead?</b></p></div>
+<div class=u>Yes, go ahead</div>
+<div class=a><span class=tool>create_folder("Newsletters")</span><span class=tool>move_email ×14</span>
+<p class=ok>Done: 14 of 14 moved to Newsletters. To undo, move them back to INBOX.</p></div></div><div class=foot>Demo with sample data. Not affiliated with Yahoo or Anthropic.</div></div></body></html>
