@@ -208,23 +208,36 @@ def _fetch_envelope(client, uid):
 def _summarize(uid, data):
     envelope = data.get(b"ENVELOPE")
     flags = data.get(b"FLAGS", ())
+    size = data.get(b"RFC822.SIZE")
+    if isinstance(size, bytes):
+        size = int(size)
     return {
         "uid": uid,
         "subject": _decode_mime(envelope.subject) if envelope else None,
         "sender": _format_address(envelope.from_[0]) if envelope and envelope.from_ else None,
         "date": envelope.date.isoformat() if envelope and envelope.date else None,
+        "size_bytes": size if isinstance(size, int) else None,
         "unread": b"\\Seen" not in flags,
         "flagged": b"\\Flagged" in flags,
         "_sort_date": envelope.date if envelope else None,
     }
 
 
-def _fetch_and_summarize(client, uids, limit):
+def _fetch_and_summarize(client, uids, limit, order="newest"):
     if not uids:
         return []
-    fetched = client.fetch(uids, ["ENVELOPE", "FLAGS"])
+    fetched = client.fetch(uids, ["ENVELOPE", "FLAGS", "RFC822.SIZE"])
     items = [_summarize(uid, data) for uid, data in fetched.items()]
-    items.sort(key=lambda item: _sort_key(item["_sort_date"]), reverse=True)
+    if order == "largest":
+        items.sort(key=lambda item: item.get("size_bytes") or 0, reverse=True)
+    elif order == "smallest":
+        items.sort(key=lambda item: item.get("size_bytes") or 0)
+    elif order == "oldest":
+        items.sort(key=lambda item: _sort_key(item["_sort_date"]), reverse=False)
+    elif order == "newest":
+        items.sort(key=lambda item: _sort_key(item["_sort_date"]), reverse=True)
+    else:
+        raise ValueError(f"order must be 'newest', 'oldest', 'largest' or 'smallest', got {order!r}")
     for item in items:
         item.pop("_sort_date", None)
     return items[:limit]
@@ -325,25 +338,22 @@ def list_folders() -> dict:
 
 @mcp.tool()
 @imap_tool
-def list_emails(folder: str = "INBOX", limit: int = 20, unread_only: bool = False) -> dict:
-    """List recent emails in a folder, newest first.
+def list_emails(folder: str = "INBOX", limit: int = 20, unread_only: bool = False, order: str = "newest") -> dict:
+    """List recent emails in a folder, sorted by date.
 
     Args:
         folder: IMAP folder name to list (default "INBOX").
         limit: Maximum number of emails to return (default 20).
         unread_only: If True, only return messages without the \\Seen flag.
-
-    Returns: {"folder": str, "count": int, "emails": [
-        {"uid": int, "subject": str, "sender": str, "date": iso8601 str,
-         "unread": bool, "flagged": bool}, ...
-    ]}
-    Does not mark anything as read.
+        order: "newest" (default), "oldest", "largest" or "smallest" — sort
+            by date or by message size (RFC822.SIZE). Output includes
+            "size_bytes".
     """
     with imap_connection() as client:
         _select_folder(client, folder)
         criteria = ["UNSEEN"] if unread_only else ["ALL"]
         uids = client.search(criteria)
-        emails = _fetch_and_summarize(client, uids, limit)
+        emails = _fetch_and_summarize(client, uids, limit, order=order)
         return {"folder": folder, "count": len(emails), "emails": emails}
 
 
@@ -357,6 +367,7 @@ def search_emails(
     before: Optional[str] = None,
     unread_only: bool = False,
     limit: int = 20,
+    order: str = "newest",
 ) -> dict:
     """Search emails in a folder using an IMAP SEARCH built from the given filters.
 
@@ -368,10 +379,12 @@ def search_emails(
         before: Only messages strictly before this date, as an ISO string "YYYY-MM-DD".
         unread_only: If True, restrict to messages without the \\Seen flag.
         limit: Maximum number of matches to return (default 20).
+        order: "newest" (default), "oldest", "largest" or "smallest" — sort
+            by date or by message size. Output includes "size_bytes".
 
     Filters are combined with AND. If no filters are given, all messages in the
     folder are matched (subject to limit). Returns the same summary shape as
-    list_emails, sorted newest first.
+    list_emails, sorted by date per `order`.
     """
     with imap_connection() as client:
         _select_folder(client, folder)
@@ -391,7 +404,7 @@ def search_emails(
             criteria = ["ALL"]
 
         uids = client.search(criteria)
-        emails = _fetch_and_summarize(client, uids, limit)
+        emails = _fetch_and_summarize(client, uids, limit, order=order)
         return {"folder": folder, "count": len(emails), "emails": emails}
 
 
