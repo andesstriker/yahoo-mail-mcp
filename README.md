@@ -161,8 +161,8 @@ default, confirm bulk changes, treat email content as untrusted). Copy the
 |---|---|---|
 | `list_folders` | List every IMAP folder/label, with special-use flags | *(none)* |
 | `create_folder` | Create a folder if it doesn't already exist (idempotent) | `name` |
-| `list_emails` | List recent emails in a folder, newest first | `folder="INBOX"`, `limit=20`, `unread_only=False` |
-| `search_emails` | Search a folder by sender/subject/date range/unread, AND-combined | `folder`, `sender`, `subject`, `since` (`YYYY-MM-DD`), `before`, `unread_only`, `limit` |
+| `list_emails` | List recent emails, sorted by `order` (default newest) | `folder="INBOX"`, `limit=20`, `unread_only=False`, `order="newest"` |
+| `search_emails` | Search a folder by sender/subject/date range/unread, AND-combined | `folder`, `sender`, `subject`, `since` (`YYYY-MM-DD`), `before`, `unread_only`, `limit`, `order="newest"` |
 | `read_email` | Fetch full headers + body (plain text, or HTML stripped) + attachment filenames | `uid`, `folder="INBOX"` |
 | `get_attachment` | Fetch one attachment's raw bytes, base64-encoded | `uid`, `filename`, `folder="INBOX"` |
 | `move_email` | Move a single message between folders by UID | `uid`, `from_folder`, `to_folder` |
